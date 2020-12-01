@@ -736,8 +736,16 @@ open class LineChartRenderer: LineRadarRenderer
             
             high.setDraw(pt: pt)
             
-            // draw the lines
-            drawHighlightLines(context: context, point: pt, set: set)
+            switch set.highlightStyle {
+            case .line:
+                drawHighlightLines(context: context, point: pt, set: set)
+            case .bar:
+                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
+            case .lineAndBar:
+                drawHighlightLines(context: context, point: pt, set: set)
+                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
+            }
+            
         }
         
         context.restoreGState()
