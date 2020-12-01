@@ -60,7 +60,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
             let y2: Double
             
             y1 = 100
-            y2 = -30.0
+            y2 = 0
             
             prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 10.0, trans: transformer, rect: &barRect) //TODO: Fix width!
             print("🚨 _1_ \(barRect)")
@@ -95,7 +95,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         rect.size.width = CGFloat(right - left)
         rect.size.height = CGFloat(bottom - top)
         
-        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
+//        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
     }
     
     /// Sets the drawing position of the highlight object based on the given bar-rect.
