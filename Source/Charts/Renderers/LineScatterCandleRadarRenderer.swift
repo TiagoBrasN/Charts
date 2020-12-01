@@ -48,71 +48,81 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     }
     
     @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint) {
-        context.saveGState()
-        var barRect = CGRect()
+//        context.saveGState()
+//        var barRect = CGRect()
         
 //        let transformer = graph.getTransformer(forAxis: set.axisDependency)
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
         
-        let topPoint = viewPortHandler.contentTop
-        let bottomPoint = viewPortHandler.contentBottom
+        let width: CGFloat = 20.0
+        let minY = viewPortHandler.contentTop
+        let maxY = viewPortHandler.contentBottom
+        let minX = point.x - (width/2)
+        let maxX = point.x + (width/2)
         
-        prepareBarHighlight(x: point.x,
-                            y1: topPoint,
-                            y2: bottomPoint,
-                            barWidthHalf: 10.0,
-                            rect: &barRect)
+        context.beginPath()
+        context.move(to: CGPoint(x: minX, y: minY))
+        context.addLine(to: CGPoint(x: maxX, y: maxY))
+        context.move(to: CGPoint(x: maxX, y: minY))
+        context.addLine(to: CGPoint(x: minX, y: maxY))
+        context.strokePath()
         
-        setHighlightDrawPos(highlight: highlight, barRect: barRect)
+//        prepareBarHighlight(x: point.x,
+//                            y1: topPoint,
+//                            y2: bottomPoint,
+//                            barWidthHalf: 10.0,
+//                            rect: &barRect)
         
-        let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
+//        setHighlightDrawPos(highlight: highlight, barRect: barRect)
         
-        context.saveGState()
+//        let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
         
-        context.addPath(path.cgPath)
-        context.clip()
-        context.fill(barRect)
-        context.restoreGState()
+//        context.saveGState()
+        
+//        context.addPath(path.cgPath)
+//        context.clip()
+//        context.fill(barRect)
+//        context.restoreGState()
     }
     
-    open func prepareBarHighlight(x: CGFloat, y1: CGFloat, y2: CGFloat, barWidthHalf: CGFloat, rect: inout CGRect) {
-        print("🚨 x -> \(x)")
-        print("🚨 y1 -> \(y1)")
-        print("🚨 y2 -> \(y2)")
-        
-        let left = x - barWidthHalf
-        let right = x + barWidthHalf
-        let top = y1
-        let bottom = y2
-        
-        print("🚨 _left_ \(left)")
-        print("🚨 _right_ \(right)")
-        print("🚨 _top_ \(top)")
-        print("🚨 _bottom_ \(bottom)")
-        
-        rect.origin.x = left
-        rect.origin.y = top
-        rect.size.width = right - left
-        rect.size.height = top - bottom
-        
-        print("🚨 _FINAL RECT_ \(rect)")
-        //        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
-    }
-    
-    /// Sets the drawing position of the highlight object based on the given bar-rect.
-    internal func setHighlightDrawPos(highlight high: Highlight, barRect: CGRect) {
-        high.setDraw(x: barRect.midX, y: barRect.origin.y)
-    }
-    
-    /// Creates path for bar in rect with rounded corners
-    internal func createBarPath(for rect: CGRect, roundedCorners: UIRectCorner) -> UIBezierPath {
-        
-        let cornerRadius = rect.width / 2.0
-        
-        let path = UIBezierPath(roundedRect: rect,
-                                byRoundingCorners: roundedCorners,
-                                cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
-        
-        return path
-    }
+//    open func prepareBarHighlight(x: CGFloat, y1: CGFloat, y2: CGFloat, barWidthHalf: CGFloat, rect: inout CGRect) {
+//        print("🚨 x -> \(x)")
+//        print("🚨 y1 -> \(y1)")
+//        print("🚨 y2 -> \(y2)")
+//
+//        let left = x - barWidthHalf
+//        let right = x + barWidthHalf
+//        let top = y1
+//        let bottom = y2
+//
+//        print("🚨 _left_ \(left)")
+//        print("🚨 _right_ \(right)")
+//        print("🚨 _top_ \(top)")
+//        print("🚨 _bottom_ \(bottom)")
+//
+//        rect.origin.x = left
+//        rect.origin.y = top
+//        rect.size.width = right - left
+//        rect.size.height = bottom - top
+//
+//        print("🚨 _FINAL RECT_ \(rect)")
+//        //        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
+//    }
+//
+//    /// Sets the drawing position of the highlight object based on the given bar-rect.
+//    internal func setHighlightDrawPos(highlight high: Highlight, barRect: CGRect) {
+//        high.setDraw(x: barRect.midX, y: barRect.origin.y)
+//    }
+//
+//    /// Creates path for bar in rect with rounded corners
+//    internal func createBarPath(for rect: CGRect, roundedCorners: UIRectCorner) -> UIBezierPath {
+//
+//        let cornerRadius = rect.width / 2.0
+//
+//        let path = UIBezierPath(roundedRect: rect,
+//                                byRoundingCorners: roundedCorners,
+//                                cornerRadii: CGSize(width: cornerRadius, height: cornerRadius))
+//
+//        return path
+//    }
 }
