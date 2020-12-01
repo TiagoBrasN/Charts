@@ -710,31 +710,25 @@ open class LineChartRenderer: LineRadarRenderer
                 continue
             }
             
+            let x = e.x // get the x-position
+            let y = e.y * Double(animator.phaseY)
+            let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
+            let pt = trans.pixelForValues(x: x, y: y)
+            
             switch set.highlightStyle {
             case .line:
                 
                 context.setStrokeColor(set.highlightColor.cgColor)
                 context.setLineWidth(set.highlightLineWidth)
-                if set.highlightLineDashLengths != nil
-                {
+                if set.highlightLineDashLengths != nil {
                     context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
-                }
-                else
-                {
+                } else {
                     context.setLineDash(phase: 0.0, lengths: [])
                 }
                 
-                let x = e.x // get the x-position
-                let y = e.y * Double(animator.phaseY)
-                
-                if x > chartXMax * animator.phaseX
-                {
+                if x > chartXMax * animator.phaseX {
                     continue
                 }
-                
-                let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
-                
-                let pt = trans.pixelForValues(x: x, y: y)
                 
                 high.setDraw(pt: pt)
                 
@@ -747,32 +741,21 @@ open class LineChartRenderer: LineRadarRenderer
                     return
                 }
                 
-                drawHighlightBar(context: context, graph: graph, highlight: high, set: set)
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt)
                 
             case .lineAndBar:
                 // Line
                 context.setStrokeColor(set.highlightColor.cgColor)
                 context.setLineWidth(set.highlightLineWidth)
-                if set.highlightLineDashLengths != nil
-                {
+                if set.highlightLineDashLengths != nil {
                     context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
-                }
-                else
-                {
+                } else {
                     context.setLineDash(phase: 0.0, lengths: [])
                 }
                 
-                let x = e.x // get the x-position
-                let y = e.y * Double(animator.phaseY)
-                
-                if x > chartXMax * animator.phaseX
-                {
+                if x > chartXMax * animator.phaseX {
                     continue
                 }
-                
-                let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
-                
-                let pt = trans.pixelForValues(x: x, y: y)
                 
                 high.setDraw(pt: pt)
                 
@@ -785,7 +768,7 @@ open class LineChartRenderer: LineRadarRenderer
                     return
                 }
                 
-                drawHighlightBar(context: context, graph: graph, highlight: high, set: set)
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt)
             }
             
             

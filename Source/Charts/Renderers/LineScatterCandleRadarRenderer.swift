@@ -16,11 +16,11 @@ import UIKit
 @objc(LineScatterCandleRadarChartRenderer)
 open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     
-//    @objc open weak var dataProvider: LineChartDataProvider?
+    //    @objc open weak var dataProvider: LineChartDataProvider?
     
     public override init(animator: Animator, viewPortHandler: ViewPortHandler) {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
-//        self.dataProvider = dataProvider
+        //        self.dataProvider = dataProvider
     }
     
     /// Draws vertical & horizontal highlight-lines if enabled.
@@ -47,33 +47,35 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         }
     }
     
-    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet) {
+    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint) {
         context.saveGState()
         var barRect = CGRect()
-
-        let transformer = graph.getTransformer(forAxis: set.axisDependency)
+        
+//        let transformer = graph.getTransformer(forAxis: set.axisDependency)
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
-
-        if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? ChartDataEntry {
-            
-            prepareBarHighlight(x: e.x, y1: 100, y2: 0, barWidthHalf: 10.0, trans: transformer, rect: &barRect)
-            
-            setHighlightDrawPos(highlight: highlight, barRect: barRect)
-            
-            let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
-            
-            context.saveGState()
-            
-            context.addPath(path.cgPath)
-            context.clip()
-            context.fill(barRect)
-            context.restoreGState()
-        }
-    
+        
+        let topPoint = viewPortHandler.contentTop
+        let bottomPoint = viewPortHandler.contentBottom
+        
+        prepareBarHighlight(x: point.x,
+                            y1: topPoint,
+                            y2: bottomPoint,
+                            barWidthHalf: 10.0,
+                            rect: &barRect)
+        
+        setHighlightDrawPos(highlight: highlight, barRect: barRect)
+        
+        let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
+        
+        context.saveGState()
+        
+        context.addPath(path.cgPath)
+        context.clip()
+        context.fill(barRect)
         context.restoreGState()
     }
     
-    open func prepareBarHighlight(x: Double, y1: Double, y2: Double, barWidthHalf: Double, trans: Transformer, rect: inout CGRect) {
+    open func prepareBarHighlight(x: CGFloat, y1: CGFloat, y2: CGFloat, barWidthHalf: CGFloat, rect: inout CGRect) {
         print("🚨 x -> \(x)")
         print("🚨 y1 -> \(y1)")
         print("🚨 y2 -> \(y2)")
@@ -88,13 +90,13 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         print("🚨 _top_ \(top)")
         print("🚨 _bottom_ \(bottom)")
         
-        rect.origin.x = CGFloat(left)
-        rect.origin.y = CGFloat(top)
-        rect.size.width = CGFloat(right - left)
-        rect.size.height = CGFloat(top - bottom)
+        rect.origin.x = left
+        rect.origin.y = top
+        rect.size.width = right - left
+        rect.size.height = top - bottom
         
         print("🚨 _FINAL RECT_ \(rect)")
-//        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
+        //        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
     }
     
     /// Sets the drawing position of the highlight object based on the given bar-rect.
