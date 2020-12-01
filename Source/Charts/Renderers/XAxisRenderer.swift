@@ -181,7 +181,6 @@ open class XAxisRenderer: AxisRendererBase
         
         var labelAttrs: [NSAttributedString.Key : Any] = [
             .font: xAxis.labelFont,
-            .foregroundColor: xAxis.labelTextColor,
             .paragraphStyle: paraStyle
         ]
         let labelRotationAngleRadians = xAxis.labelRotationAngle.DEG2RAD
@@ -203,9 +202,8 @@ open class XAxisRenderer: AxisRendererBase
         
         for i in stride(from: 0, to: entries.count, by: 1)
         {
-            if i == xAxis.labelHighlightIndex {
-                labelAttrs[.foregroundColor] = xAxis.labelHighlightColor
-            }
+
+            labelAttrs[.foregroundColor] = i == xAxis.labelHighlightIndex ? xAxis.labelHighlightColor : xAxis.labelTextColor
             
             if centeringEnabled
             {
