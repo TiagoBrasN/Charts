@@ -48,25 +48,22 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     }
     
     @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet) {
-        print("🚨 _4_")
         context.saveGState()
         var barRect = CGRect()
-        print("🚨 _5_")
+
         let transformer = graph.getTransformer(forAxis: set.axisDependency)
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
-//            context.setAlpha(set.highlightAlpha)
-        print("🚨 _6_")
+
         if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? ChartDataEntry {
-            print("🚨 _7_")
             
             let y1: Double
             let y2: Double
             
-            y1 = e.y
-            y2 = 0.0
+            y1 = 100
+            y2 = -30.0
             
-            print("🚨 _8_")
-            prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 30 / 2.0, trans: transformer, rect: &barRect) //TODO: Fix width!
+            prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 10.0, trans: transformer, rect: &barRect) //TODO: Fix width!
+            print("🚨 _1_ \(barRect)")
             setHighlightDrawPos(highlight: highlight, barRect: barRect)
             
             let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
@@ -77,9 +74,8 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
             context.clip()
             context.fill(barRect)
             context.restoreGState()
-            print("🚨 _9_")
         }
-        print("🚨 _10_")
+    
         context.restoreGState()
     }
     
@@ -88,6 +84,11 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         let right = x + barWidthHalf
         let top = y1
         let bottom = y2
+        
+        print("🚨 _left_ \(left)")
+        print("🚨 _right_ \(right)")
+        print("🚨 _top_ \(top)")
+        print("🚨 _bottom_ \(bottom)")
         
         rect.origin.x = CGFloat(left)
         rect.origin.y = CGFloat(top)

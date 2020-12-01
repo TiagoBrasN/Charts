@@ -741,15 +741,12 @@ open class LineChartRenderer: LineRadarRenderer
                 drawHighlightLines(context: context, point: pt, set: set)
                 
             case .bar:
-                print("🚨 _1_")
                 guard
                     let graph = dataProvider as? LineChartView
                 else {
-                    print("🚨 _2_")
                     return
                 }
                 
-                print("🚨 _3_")
                 drawHighlightBar(context: context, graph: graph, highlight: high, set: set)
                 
             case .lineAndBar:
@@ -782,7 +779,13 @@ open class LineChartRenderer: LineRadarRenderer
                 drawHighlightLines(context: context, point: pt, set: set)
                 
                 // Bar
-//                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
+                guard
+                    let graph = dataProvider as? LineChartView
+                else {
+                    return
+                }
+                
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set)
             }
             
             
