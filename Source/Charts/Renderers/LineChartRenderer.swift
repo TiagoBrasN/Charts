@@ -687,8 +687,7 @@ open class LineChartRenderer: LineRadarRenderer
         accessibilityPostLayoutChangedNotification()
     }
     
-    open override func drawHighlighted(context: CGContext, indices: [Highlight])
-    {
+    open override func drawHighlighted(context: CGContext, indices: [Highlight]) {
         guard
             let dataProvider = dataProvider,
             let lineData = dataProvider.lineData
@@ -700,51 +699,92 @@ open class LineChartRenderer: LineRadarRenderer
         
         for high in indices
         {
-            guard let set = lineData.getDataSetByIndex(high.dataSetIndex) as? ILineChartDataSet
-                , set.isHighlightEnabled
+            guard
+                let set = lineData.getDataSetByIndex(high.dataSetIndex) as? ILineChartDataSet,
+                set.isHighlightEnabled
                 else { continue }
             
             guard let e = set.entryForXValue(high.x, closestToY: high.y) else { continue }
             
-            if !isInBoundsX(entry: e, dataSet: set)
-            {
+            if !isInBoundsX(entry: e, dataSet: set) {
                 continue
             }
-        
-            context.setStrokeColor(set.highlightColor.cgColor)
-            context.setLineWidth(set.highlightLineWidth)
-            if set.highlightLineDashLengths != nil
-            {
-                context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
-            }
-            else
-            {
-                context.setLineDash(phase: 0.0, lengths: [])
-            }
-            
-            let x = e.x // get the x-position
-            let y = e.y * Double(animator.phaseY)
-            
-            if x > chartXMax * animator.phaseX
-            {
-                continue
-            }
-            
-            let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
-            
-            let pt = trans.pixelForValues(x: x, y: y)
-            
-            high.setDraw(pt: pt)
             
             switch set.highlightStyle {
             case .line:
+                
+                context.setStrokeColor(set.highlightColor.cgColor)
+                context.setLineWidth(set.highlightLineWidth)
+                if set.highlightLineDashLengths != nil
+                {
+                    context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
+                }
+                else
+                {
+                    context.setLineDash(phase: 0.0, lengths: [])
+                }
+                
+                let x = e.x // get the x-position
+                let y = e.y * Double(animator.phaseY)
+                
+                if x > chartXMax * animator.phaseX
+                {
+                    continue
+                }
+                
+                let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
+                
+                let pt = trans.pixelForValues(x: x, y: y)
+                
+                high.setDraw(pt: pt)
+                
                 drawHighlightLines(context: context, point: pt, set: set)
+                
             case .bar:
-                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
+                print("🚨 _1_")
+                guard
+                    let graph = dataProvider as? LineChartView
+                else {
+                    print("🚨 _2_")
+                    return
+                }
+                
+                print("🚨 _3_")
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set)
+                
             case .lineAndBar:
+                // Line
+                context.setStrokeColor(set.highlightColor.cgColor)
+                context.setLineWidth(set.highlightLineWidth)
+                if set.highlightLineDashLengths != nil
+                {
+                    context.setLineDash(phase: set.highlightLineDashPhase, lengths: set.highlightLineDashLengths!)
+                }
+                else
+                {
+                    context.setLineDash(phase: 0.0, lengths: [])
+                }
+                
+                let x = e.x // get the x-position
+                let y = e.y * Double(animator.phaseY)
+                
+                if x > chartXMax * animator.phaseX
+                {
+                    continue
+                }
+                
+                let trans = dataProvider.getTransformer(forAxis: set.axisDependency)
+                
+                let pt = trans.pixelForValues(x: x, y: y)
+                
+                high.setDraw(pt: pt)
+                
                 drawHighlightLines(context: context, point: pt, set: set)
-                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
+                
+                // Bar
+//                drawHighlightBar(context: context, highlights: indices, dataProvider: dataProvider)
             }
+            
             
         }
         

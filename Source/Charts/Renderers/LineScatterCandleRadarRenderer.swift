@@ -47,41 +47,25 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         }
     }
     
-    @objc open func drawHighlightBar(context: CGContext, highlights: [Highlight], dataProvider: LineChartDataProvider?) {
-        
-        guard
-            let graph = dataProvider as? LineChartView,
-            let graphData = graph.data
-        else { return }
-        
+    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet) {
+        print("🚨 _4_")
         context.saveGState()
         var barRect = CGRect()
-        
-        for highlight in highlights {
-            
-            guard
-                let set = graphData.getDataSetByIndex(highlight.dataSetIndex) as? LineChartDataSet,
-                set.isHighlightEnabled
-            else { continue }
-            
-            let transformer = graph.getTransformer(forAxis: set.axisDependency)
-            context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
+        print("🚨 _5_")
+        let transformer = graph.getTransformer(forAxis: set.axisDependency)
+        context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
 //            context.setAlpha(set.highlightAlpha)
+        print("🚨 _6_")
+        if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? BarChartDataEntry {
+            print("🚨 _7_")
+            let isStack = highlight.stackIndex >= 0 && e.isStacked
             
-            if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? BarChartDataEntry {
-                
-                if !isInBoundsX(entry: e, dataSet: set) {
-                    continue
-                }
-                
-                let isStack = highlight.stackIndex >= 0 && e.isStacked
-                
-                let y1: Double
-                let y2: Double
-                
-                if isStack {
-                    y1 = e.positiveSum
-                    y2 = -e.negativeSum
+            let y1: Double
+            let y2: Double
+            
+            if isStack {
+                y1 = e.positiveSum
+                y2 = -e.negativeSum
 //                    if graph.isHighlightFullBarEnabled {
 //                        y1 = e.positiveSum
 //                        y2 = -e.negativeSum
@@ -91,26 +75,25 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
 //                        y1 = range?.from ?? 0.0
 //                        y2 = range?.to ?? 0.0
 //                    }
-                }  else {
-                    y1 = e.y
-                    y2 = 0.0
-                }
-                
-                prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 30 / 2.0, trans: transformer, rect: &barRect) //TODO: Fix width!
-                setHighlightDrawPos(highlight: highlight, barRect: barRect)
-                
-                let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
-                
-                context.saveGState()
-                
-                context.addPath(path.cgPath)
-                context.clip()
-                context.fill(barRect)
-                context.restoreGState()
+            }  else {
+                y1 = e.y
+                y2 = 0.0
             }
+            print("🚨 _8_")
+            prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 30 / 2.0, trans: transformer, rect: &barRect) //TODO: Fix width!
+            setHighlightDrawPos(highlight: highlight, barRect: barRect)
             
+            let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
+            
+            context.saveGState()
+            
+            context.addPath(path.cgPath)
+            context.clip()
+            context.fill(barRect)
+            context.restoreGState()
+            print("🚨 _9_")
         }
-        
+        print("🚨 _10_")
         context.restoreGState()
     }
     
