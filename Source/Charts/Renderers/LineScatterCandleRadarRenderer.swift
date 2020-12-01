@@ -58,27 +58,13 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         print("🚨 _6_")
         if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? ChartDataEntry {
             print("🚨 _7_")
-            let isStack = highlight.stackIndex >= 0 && e.isStacked
             
             let y1: Double
             let y2: Double
             
-            if isStack {
-                y1 = e.positiveSum
-                y2 = -e.negativeSum
-//                    if graph.isHighlightFullBarEnabled {
-//                        y1 = e.positiveSum
-//                        y2 = -e.negativeSum
-//                    } else {
-//                        let range = e.ranges?[highlight.stackIndex]
-//
-//                        y1 = range?.from ?? 0.0
-//                        y2 = range?.to ?? 0.0
-//                    }
-            }  else {
-                y1 = e.y
-                y2 = 0.0
-            }
+            y1 = e.y
+            y2 = 0.0
+            
             print("🚨 _8_")
             prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 30 / 2.0, trans: transformer, rect: &barRect) //TODO: Fix width!
             setHighlightDrawPos(highlight: highlight, barRect: barRect)
