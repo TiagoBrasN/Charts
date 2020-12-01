@@ -56,14 +56,8 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
 
         if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? ChartDataEntry {
             
-            let y1: Double
-            let y2: Double
+            prepareBarHighlight(x: e.x, y1: 100, y2: 0, barWidthHalf: 10.0, trans: transformer, rect: &barRect)
             
-            y1 = 100
-            y2 = 0
-            
-            prepareBarHighlight(x: e.x, y1: y1, y2: y2, barWidthHalf: 10.0, trans: transformer, rect: &barRect) //TODO: Fix width!
-            print("🚨 _1_ \(barRect)")
             setHighlightDrawPos(highlight: highlight, barRect: barRect)
             
             let path = createBarPath(for: barRect, roundedCorners: UIRectCorner())
@@ -80,6 +74,10 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     }
     
     open func prepareBarHighlight(x: Double, y1: Double, y2: Double, barWidthHalf: Double, trans: Transformer, rect: inout CGRect) {
+        print("🚨 x -> \(x)")
+        print("🚨 y1 -> \(y1)")
+        print("🚨 y2 -> \(y2)")
+        
         let left = x - barWidthHalf
         let right = x + barWidthHalf
         let top = y1
@@ -93,8 +91,9 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         rect.origin.x = CGFloat(left)
         rect.origin.y = CGFloat(top)
         rect.size.width = CGFloat(right - left)
-        rect.size.height = CGFloat(bottom - top)
+        rect.size.height = CGFloat(top - bottom)
         
+        print("🚨 _FINAL RECT_ \(rect)")
 //        trans.rectValueToPixel(&rect, phaseY: animator.phaseY )
     }
     
