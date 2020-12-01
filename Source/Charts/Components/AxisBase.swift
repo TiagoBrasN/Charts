@@ -25,6 +25,8 @@ open class AxisBase: ComponentBase
     private var _axisValueFormatter: IAxisValueFormatter?
     
     @objc open var labelFont = NSUIFont.systemFont(ofSize: 10.0)
+    @objc open var labelHighlightColor = NSUIColor.labelOrBlack
+    @objc open var labelHighlightIndex = 0
     @objc open var labelTextColor = NSUIColor.labelOrBlack
     
     @objc open var axisLineColor = NSUIColor.gray
