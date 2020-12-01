@@ -203,6 +203,10 @@ open class XAxisRenderer: AxisRendererBase
         
         for i in stride(from: 0, to: entries.count, by: 1)
         {
+            if i == xAxis.labelHighlightIndex {
+                labelAttrs[.foregroundColor] = xAxis.labelHighlightColor
+            }
+            
             if centeringEnabled
             {
                 position.x = CGFloat(xAxis.centeredEntries[i])
