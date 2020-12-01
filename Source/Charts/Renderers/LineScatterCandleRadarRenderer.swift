@@ -62,8 +62,8 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         
         context.beginPath()
         context.move(to: CGPoint(x: minX, y: minY))
-        context.addLine(to: CGPoint(x: maxX, y: maxY))
-        context.move(to: CGPoint(x: maxX, y: minY))
+        context.addLine(to: CGPoint(x: maxX, y: minY))
+        context.move(to: CGPoint(x: maxX, y: maxY))
         context.addLine(to: CGPoint(x: minX, y: maxY))
         context.strokePath()
         
