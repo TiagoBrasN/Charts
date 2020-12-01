@@ -56,7 +56,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
 //            context.setAlpha(set.highlightAlpha)
         print("🚨 _6_")
-        if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? BarChartDataEntry {
+        if let e = set.entryForXValue(highlight.x, closestToY: highlight.y) as? ChartDataEntry {
             print("🚨 _7_")
             let isStack = highlight.stackIndex >= 0 && e.isStacked
             
