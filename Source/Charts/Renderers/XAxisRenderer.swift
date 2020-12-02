@@ -204,6 +204,7 @@ open class XAxisRenderer: AxisRendererBase
         {
 
             labelAttrs[.foregroundColor] = i == xAxis.labelHighlightIndex ? xAxis.labelHighlightColor : xAxis.labelTextColor
+            labelAttrs[.backgroundColor] = 1 == xAxis.labelHighlightIndex ? xAxis.labelHighlightBackgroundColor : .clear
             
             if centeringEnabled
             {
