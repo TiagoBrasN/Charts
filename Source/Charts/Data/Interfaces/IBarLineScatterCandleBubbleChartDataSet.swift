@@ -29,6 +29,7 @@ public protocol IBarLineScatterCandleBubbleChartDataSet: IChartDataSet
     var highlightStyle: HighlightStyle { get set }
     var barHighlightWidth: CGFloat { get set }
     var highlightColor: NSUIColor { get set }
+    var highlightBarColor: NSUIColor { get set }
     var highlightLineWidth: CGFloat { get set }
     var highlightLineDashPhase: CGFloat { get set }
     var highlightLineDashLengths: [CGFloat]? { get set }

@@ -55,7 +55,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         let maxX = point.x + (width/2)
         
         let rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height:  maxY - minY)
-        context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
+        context.setFillColor(set.highlightBarColor.cgColor)
         context.addRect(rectangle)
         context.setLineWidth(0)
         context.setStrokeColor(UIColor.clear.cgColor)
