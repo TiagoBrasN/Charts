@@ -16,11 +16,8 @@ import UIKit
 @objc(LineScatterCandleRadarChartRenderer)
 open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     
-    //    @objc open weak var dataProvider: LineChartDataProvider?
-    
     public override init(animator: Animator, viewPortHandler: ViewPortHandler) {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
-        //        self.dataProvider = dataProvider
     }
     
     /// Draws vertical & horizontal highlight-lines if enabled.
@@ -48,9 +45,23 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     }
     
     @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint) {
+        
+        guard let e = set.entryForIndex(3) else { return }
+        let xAxis = graph.xAxis
+//        let label = xAxis.valueFormatter?.stringForValue(e.x, axis: xAxis) ?? "\(e.x)"
+
+        let elementValueText = set.valueFormatter?.stringForValue(e.y,
+                                                                  entry: e,
+                                                                  dataSetIndex: highlight.dataSetIndex,
+                                                                  viewPortHandler: viewPortHandler) ?? "\(e.y)"
+        let tempLabel = UILabel()
+        tempLabel.text = elementValueText
+        tempLabel.sizeToFit()
+        print("💡 \(tempLabel.bounds.size)")
+        
         let width = set.barHighlightWidth
         let minY = viewPortHandler.contentTop
-        let maxY = viewPortHandler.contentBottom + 50
+        let maxY = viewPortHandler.contentBottom
         let minX = point.x - (width/2)
         let maxX = point.x + (width/2)
         

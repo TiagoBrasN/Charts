@@ -697,7 +697,7 @@ open class LineChartRenderer: LineRadarRenderer
         
         context.saveGState()
         
-        for high in indices
+        for (index, high) in indices.enumerated()
         {
             guard
                 let set = lineData.getDataSetByIndex(high.dataSetIndex) as? ILineChartDataSet,
