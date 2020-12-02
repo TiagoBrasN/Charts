@@ -58,8 +58,15 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         let maxY = viewPortHandler.contentBottom
         let minX = point.x - (width/2)
         let maxX = point.x + (width/2)
+        print("💡 width: \(width)")
+        print("💡 minY: \(minY)")
+        print("💡 maxY: \(maxY)")
+        print("💡 minX: \(minX)")
+        print("💡 maxX: \(maxX)")
+        print("💡 point.x: \(point.x)")
         
         let rectangle = CGRect(x: point.x, y: minY, width: minX + maxX, height:  maxY - minY)
+        print("💡 \(rectangle)")
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
         context.addRect(rectangle)
         context.drawPath(using: .fillStroke)
