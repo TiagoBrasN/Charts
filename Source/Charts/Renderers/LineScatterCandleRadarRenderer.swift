@@ -52,7 +52,6 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
 //        var barRect = CGRect()
         
 //        let transformer = graph.getTransformer(forAxis: set.axisDependency)
-        context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
         
         let width: CGFloat = 20.0
         let minY = viewPortHandler.contentTop
@@ -60,12 +59,17 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         let minX = point.x - (width/2)
         let maxX = point.x + (width/2)
         
-        context.beginPath()
-        context.move(to: CGPoint(x: minX, y: minY))
-        context.addLine(to: CGPoint(x: maxX, y: minY))
-        context.move(to: CGPoint(x: maxX, y: maxY))
-        context.addLine(to: CGPoint(x: minX, y: maxY))
-        context.strokePath()
+        let rectangle = CGRect(x: point.x, y: minY, width: minX + maxX, height:  maxY - minY)
+        context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
+        context.addRect(rectangle)
+        context.drawPath(using: .fillStroke)
+        
+//        context.beginPath()
+//        context.move(to: CGPoint(x: minX, y: minY))
+//        context.addLine(to: CGPoint(x: maxX, y: minY))
+//        context.move(to: CGPoint(x: maxX, y: maxY))
+//        context.addLine(to: CGPoint(x: minX, y: maxY))
+//        context.strokePath()
         
 //        prepareBarHighlight(x: point.x,
 //                            y1: topPoint,
