@@ -249,6 +249,8 @@ open class ChartUtils
         
         NSUIGraphicsPushContext(context)
         
+        context.setFillColor(UIColor.red.cgColor)
+        
         if angleRadians != 0.0
         {
             // Move the text drawing rect in a way that it always rotates around its center
