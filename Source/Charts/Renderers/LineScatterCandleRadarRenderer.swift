@@ -50,7 +50,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
     @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint) {
         let width = set.barHighlightWidth
         let minY = viewPortHandler.contentTop
-        let maxY = viewPortHandler.contentBottom
+        let maxY = viewPortHandler.contentBottom + 50
         let minX = point.x - (width/2)
         let maxX = point.x + (width/2)
         
