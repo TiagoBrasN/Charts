@@ -44,15 +44,12 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         }
     }
     
-    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint) {
-        
-        guard let e = set.entryForIndex(3) else { return }
-        let xAxis = graph.xAxis
+    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint, entry: ChartDataEntry) {
 
-        let elementValueText = set.valueFormatter?.stringForValue(e.y,
-                                                                  entry: e,
+        let elementValueText = set.valueFormatter?.stringForValue(entry.y,
+                                                                  entry: entry,
                                                                   dataSetIndex: highlight.dataSetIndex,
-                                                                  viewPortHandler: viewPortHandler) ?? "\(e.y)"
+                                                                  viewPortHandler: viewPortHandler) ?? "\(entry.y)"
         let tempLabel = UILabel()
         tempLabel.text = elementValueText
         tempLabel.sizeToFit()

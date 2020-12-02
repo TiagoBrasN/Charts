@@ -741,7 +741,7 @@ open class LineChartRenderer: LineRadarRenderer
                     return
                 }
                 
-                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt)
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt, entry: e)
                 
             case .lineAndBar:
                 // Line
@@ -767,8 +767,8 @@ open class LineChartRenderer: LineRadarRenderer
                 else {
                     return
                 }
-                print("💡 INDEX \(index)")
-                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt)
+                
+                drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt, entry: e)
             }
             
             
