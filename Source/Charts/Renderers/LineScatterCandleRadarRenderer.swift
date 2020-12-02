@@ -65,7 +65,7 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         print("💡 maxX: \(maxX)")
         print("💡 point.x: \(point.x)")
         
-        let rectangle = CGRect(x: point.x, y: minY, width: minX + maxX, height:  maxY - minY)
+        let rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height:  maxY - minY)
         print("💡 \(rectangle)")
         context.setFillColor(set.highlightColor.withAlphaComponent(0.3).cgColor)
         context.addRect(rectangle)
