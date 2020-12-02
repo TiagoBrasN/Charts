@@ -48,7 +48,6 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         
         guard let e = set.entryForIndex(3) else { return }
         let xAxis = graph.xAxis
-//        let label = xAxis.valueFormatter?.stringForValue(e.x, axis: xAxis) ?? "\(e.x)"
 
         let elementValueText = set.valueFormatter?.stringForValue(e.y,
                                                                   entry: e,
@@ -57,9 +56,8 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
         let tempLabel = UILabel()
         tempLabel.text = elementValueText
         tempLabel.sizeToFit()
-        print("💡 \(tempLabel.bounds.size)")
         
-        let width = set.barHighlightWidth
+        let width = set.barHighlightWidth != 0 ? set.barHighlightWidth : tempLabel.bounds.size.width
         let minY = viewPortHandler.contentTop
         let maxY = viewPortHandler.contentBottom
         let minX = point.x - (width/2)

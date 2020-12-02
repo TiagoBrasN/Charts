@@ -767,7 +767,7 @@ open class LineChartRenderer: LineRadarRenderer
                 else {
                     return
                 }
-                
+                print("💡 INDEX \(index)")
                 drawHighlightBar(context: context, graph: graph, highlight: high, set: set, point: pt)
             }
             
