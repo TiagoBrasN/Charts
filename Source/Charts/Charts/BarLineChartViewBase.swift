@@ -13,7 +13,7 @@ import Foundation
 import CoreGraphics
 
 #if canImport(UIKit)
-    import UIKit
+import UIKit
 #endif
 
 #if canImport(Cocoa)
@@ -53,12 +53,12 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     
     /// When enabled, the values will be clipped to contentRect, otherwise they can bleed outside the content rect.
     @objc open var clipValuesToContentEnabled: Bool = false
-
+    
     /// When disabled, the data and/or highlights will not be clipped to contentRect. Disabling this option can
     /// be useful, when the data lies fully within the content rect, but is drawn in such a way (such as thick lines)
     /// that there is unwanted clipping.
     @objc open var clipDataToContentEnabled: Bool = true
-
+    
     /// Sets the minimum offset (padding) around the chart, defaults to 10
     @objc open var minOffset = CGFloat(10.0)
     
@@ -73,11 +73,11 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     /// The right y-axis object. In the horizontal bar-chart, this is the
     /// bottom axis.
     @objc open internal(set) var rightAxis = YAxis(position: .right)
-
+    
     /// The left Y axis renderer. This is a read-write property so you can set your own custom renderer here.
     /// **default**: An instance of YAxisRenderer
     @objc open lazy var leftYAxisRenderer = YAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: leftAxis, transformer: _leftAxisTransformer)
-
+    
     /// The right Y axis renderer. This is a read-write property so you can set your own custom renderer here.
     /// **default**: An instance of YAxisRenderer
     @objc open lazy var rightYAxisRenderer = YAxisRenderer(viewPortHandler: _viewPortHandler, yAxis: rightAxis, transformer: _rightAxisTransformer)
@@ -117,7 +117,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     internal override func initialize()
     {
         super.initialize()
-
+        
         _leftAxisTransformer = Transformer(viewPortHandler: _viewPortHandler)
         _rightAxisTransformer = Transformer(viewPortHandler: _viewPortHandler)
         
@@ -136,7 +136,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         _doubleTapGestureRecognizer.isEnabled = _doubleTapToZoomEnabled
         _panGestureRecognizer.isEnabled = _dragXEnabled || _dragYEnabled
-
+        
         #if !os(tvOS)
         _pinchGestureRecognizer = NSUIPinchGestureRecognizer(target: self, action: #selector(BarLineChartViewBase.pinchGestureRecognized(_:)))
         _pinchGestureRecognizer.delegate = self
@@ -173,21 +173,21 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     open override func draw(_ rect: CGRect)
     {
         super.draw(rect)
-
+        
         guard data != nil, let renderer = renderer else { return }
         
         let optionalContext = NSUIGraphicsGetCurrentContext()
         guard let context = optionalContext else { return }
-
+        
         // execute all drawing commands
         drawGridBackground(context: context)
         
-
+        
         if _autoScaleMinMaxEnabled
         {
             autoScale()
         }
-
+        
         if leftAxis.isEnabled
         {
             leftYAxisRenderer.computeAxis(min: leftAxis._axisMinimum, max: leftAxis._axisMaximum, inverted: leftAxis.isInverted)
@@ -206,7 +206,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         xAxisRenderer.renderAxisLine(context: context)
         leftYAxisRenderer.renderAxisLine(context: context)
         rightYAxisRenderer.renderAxisLine(context: context)
-
+        
         // The renderers are responsible for clipping, to account for line-width center etc.
         if xAxis.drawGridLinesBehindDataEnabled
         {
@@ -273,7 +273,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         xAxisRenderer.renderAxisLabels(context: context)
         leftYAxisRenderer.renderAxisLabels(context: context)
         rightYAxisRenderer.renderAxisLabels(context: context)
-
+        
         if clipValuesToContentEnabled
         {
             context.saveGState()
@@ -287,9 +287,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         {
             renderer.drawValues(context: context)
         }
-
+        
         _legendRenderer.renderLegend(context: context)
-
+        
         drawDescription(context: context)
         
         drawMarkers(context: context)
@@ -302,7 +302,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     internal func autoScale()
     {
         guard let data = _data
-            else { return }
+        else { return }
         
         data.calcMinMaxY(fromX: self.lowestVisibleX, toX: self.highestVisibleX)
         
@@ -350,7 +350,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 min: _xAxis._axisMinimum,
                 max: _xAxis._axisMaximum,
                 inverted: false)
-
+            
             if _legend !== nil
             {
                 legendRenderer?.computeLegend(data: data)
@@ -445,7 +445,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             {
                 offsetRight += rightAxis.requiredSize().width
             }
-
+            
             if xAxis.isEnabled && xAxis.isDrawLabelsEnabled
             {
                 let xlabelheight = xAxis.labelRotatedHeight + xAxis.yOffset
@@ -470,7 +470,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             offsetRight += self.extraRightOffset
             offsetBottom += self.extraBottomOffset
             offsetLeft += self.extraLeftOffset
-
+            
             _viewPortHandler.restrainViewPort(
                 offsetLeft: max(self.minOffset, offsetLeft),
                 offsetTop: max(self.minOffset, offsetTop),
@@ -545,18 +545,16 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             
             let h = getHighlightByTouchPoint(recognizer.location(in: self))
             
-            if h === nil || h == self.lastHighlighted
-            {
-                print("💡 1")
-                lastHighlighted = nil
-                highlightValue(nil, callDelegate: true)
-            }
-            else
-            {
-                print("💡 2")
-                lastHighlighted = h
-                highlightValue(h, callDelegate: true)
-            }
+            //            if h === nil || h == self.lastHighlighted
+            //            {
+            //                lastHighlighted = nil
+            //                highlightValue(nil, callDelegate: true)
+            //            }
+            //            else
+            //            {
+            lastHighlighted = h
+            highlightValue(h, callDelegate: true)
+            //            }
         }
     }
     
@@ -582,10 +580,10 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
                 {
                     location.y = -(self.bounds.size.height - location.y - _viewPortHandler.offsetBottom)
                 }
-
+                
                 let scaleX: CGFloat = isScaleXEnabled ? 1.4 : 1.0
                 let scaleY: CGFloat = isScaleYEnabled ? 1.4 : 1.0
-
+                
                 self.zoom(scaleX: scaleX, scaleY: scaleY, x: location.x, y: location.y)
                 delegate?.chartScaled?(self, scaleX: scaleX, scaleY: scaleY)
             }
@@ -625,7 +623,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             }
         }
         else if recognizer.state == NSUIGestureRecognizerState.ended ||
-            recognizer.state == NSUIGestureRecognizerState.cancelled
+                    recognizer.state == NSUIGestureRecognizerState.cancelled
         {
             if _isScaling
             {
@@ -937,15 +935,15 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         #if !os(tvOS)
         if ((gestureRecognizer is NSUIPinchGestureRecognizer && otherGestureRecognizer is NSUIPanGestureRecognizer) ||
-            (gestureRecognizer is NSUIPanGestureRecognizer && otherGestureRecognizer is NSUIPinchGestureRecognizer))
+                (gestureRecognizer is NSUIPanGestureRecognizer && otherGestureRecognizer is NSUIPinchGestureRecognizer))
         {
             return true
         }
         #endif
         
         if gestureRecognizer is NSUIPanGestureRecognizer,
-            otherGestureRecognizer is NSUIPanGestureRecognizer,
-            gestureRecognizer == _panGestureRecognizer
+           otherGestureRecognizer is NSUIPanGestureRecognizer,
+           gestureRecognizer == _panGestureRecognizer
         {
             var scrollView = self.superview
             while scrollView != nil && !(scrollView is NSUIScrollView)
@@ -956,11 +954,11 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             // If there is two scrollview together, we pick the superview of the inner scrollview.
             // In the case of UITableViewWrepperView, the superview will be UITableView
             if let superViewOfScrollView = scrollView?.superview,
-                superViewOfScrollView is NSUIScrollView
+               superViewOfScrollView is NSUIScrollView
             {
                 scrollView = superViewOfScrollView
             }
-
+            
             var foundScrollView = scrollView as? NSUIScrollView
             
             if !(foundScrollView?.nsuiIsScrollEnabled ?? true)
@@ -997,7 +995,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         calculateOffsets()
         setNeedsDisplay()
     }
-
+    
     /// Zooms out by 0.7, from the charts center.
     @objc open func zoomOut()
     {
@@ -1005,7 +1003,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         let matrix = _viewPortHandler.zoomOut(x: center.x, y: -center.y)
         _viewPortHandler.refresh(newMatrix: matrix, chart: self, invalidate: false)
-
+        
         // Range might have changed, which means that Y-axis labels could have changed in size, affecting Y-axis size. So we need to recalculate offsets.
         calculateOffsets()
         setNeedsDisplay()
@@ -1021,7 +1019,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         calculateOffsets()
         setNeedsDisplay()
     }
-
+    
     /// Zooms in or out by the given scale factor. x and y are the coordinates
     /// (in pixels) of the zoom center.
     ///
@@ -1032,9 +1030,9 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     ///   - y:
     @objc open func zoom(
         scaleX: CGFloat,
-               scaleY: CGFloat,
-               x: CGFloat,
-               y: CGFloat)
+        scaleY: CGFloat,
+        x: CGFloat,
+        y: CGFloat)
     {
         let matrix = _viewPortHandler.zoom(scaleX: scaleX, scaleY: scaleY, x: x, y: -y)
         _viewPortHandler.refresh(newMatrix: matrix, chart: self, invalidate: false)
@@ -1055,10 +1053,10 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     ///   - axis:
     @objc open func zoom(
         scaleX: CGFloat,
-               scaleY: CGFloat,
-               xValue: Double,
-               yValue: Double,
-               axis: YAxis.AxisDependency)
+        scaleY: CGFloat,
+        xValue: Double,
+        yValue: Double,
+        axis: YAxis.AxisDependency)
     {
         let job = ZoomViewJob(
             viewPortHandler: viewPortHandler,
@@ -1082,7 +1080,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     ///   - axis:
     @objc open func zoomToCenter(
         scaleX: CGFloat,
-               scaleY: CGFloat)
+        scaleY: CGFloat)
     {
         let center = centerOffsets
         let matrix = viewPortHandler.zoom(
@@ -1132,7 +1130,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             zoomOriginY: origin.y,
             duration: duration,
             easing: easing)
-            
+        
         addViewportJob(job)
     }
     
@@ -1222,7 +1220,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         let xScale = _xAxis.axisRange / minXRange
         _viewPortHandler.setMaximumScaleX(CGFloat(xScale))
     }
-
+    
     /// Limits the maximum and minimum value count that can be visible by pinching and zooming.
     ///
     /// e.g. minRange=10, maxRange=100 no less than 10 values and no more that 100 values can be viewed
@@ -1259,7 +1257,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         let yScale = getAxisRange(axis: axis) / minYRange
         _viewPortHandler.setMaximumScaleY(CGFloat(yScale))
     }
-
+    
     /// Limits the maximum and minimum y range that can be visible by pinching and zooming.
     ///
     /// - Parameters:
@@ -1286,7 +1284,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         addViewportJob(job)
     }
-
+    
     /// Centers the viewport to the specified y-value on the y-axis.
     /// This also refreshes the chart by calling setNeedsDisplay().
     /// 
@@ -1306,7 +1304,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         
         addViewportJob(job)
     }
-
+    
     /// This will move the left side of the current viewport to the specified x-value on the x-axis, and center the viewport to the specified y-value on the y-axis.
     /// This also refreshes the chart by calling setNeedsDisplay().
     /// 
@@ -1496,7 +1494,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         centerViewToAnimated(xValue: xValue, yValue: yValue, axis: axis, duration: duration, easingOption: .easeInOutSine)
     }
-
+    
     /// Sets custom offsets for the current `ChartViewPort` (the offsets on the sides of the actual chart window). Setting this will prevent the chart from automatically calculating it's offsets. Use `resetViewPortOffsets()` to undo this.
     /// ONLY USE THIS WHEN YOU KNOW WHAT YOU ARE DOING, else use `setExtraOffsets(...)`.
     @objc open func setViewPortOffsets(left: CGFloat, top: CGFloat, right: CGFloat, bottom: CGFloat)
@@ -1516,14 +1514,14 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             })
         }
     }
-
+    
     /// Resets all custom offsets set via `setViewPortOffsets(...)` method. Allows the chart to again calculate all offsets automatically.
     @objc open func resetViewPortOffsets()
     {
         _customViewPortEnabled = false
         calculateOffsets()
     }
-
+    
     // MARK: - Accessors
     
     /// - Returns: The range of the specified axis.
@@ -1538,17 +1536,17 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             return rightAxis.axisRange
         }
     }
-
+    
     /// - Returns: The position (in pixels) the provided Entry has inside the chart view
     @objc open func getPosition(entry e: ChartDataEntry, axis: YAxis.AxisDependency) -> CGPoint
     {
         var vals = CGPoint(x: CGFloat(e.x), y: CGFloat(e.y))
-
+        
         getTransformer(forAxis: axis).pointValueToPixel(&vals)
-
+        
         return vals
     }
-
+    
     /// is dragging enabled? (moving the chart with the finger) for the chart (this does not affect scaling).
     @objc open var dragEnabled: Bool
     {
@@ -1696,7 +1694,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         return drawBordersEnabled
     }
-
+    
     /// - Returns: The x and y values in the chart at the given touch point
     /// (encapsulated in a `CGPoint`). This method transforms pixel coordinates to
     /// coordinates / values in the chart. This is the opposite method to
@@ -1705,7 +1703,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
     {
         return getTransformer(forAxis: axis).valueForTouchPoint(pt)
     }
-
+    
     /// Transforms the given chart values into pixels. This is the opposite
     /// method to `valueForTouchPoint(...)`.
     @objc open func pixelForValues(x: Double, y: Double, axis: YAxis.AxisDependency) -> CGPoint
@@ -1733,7 +1731,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
         return nil
     }
-
+    
     /// The current x-scale factor
     @objc open var scaleX: CGFloat
     {
@@ -1743,7 +1741,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
         return _viewPortHandler.scaleX
     }
-
+    
     /// The current y-scale factor
     @objc open var scaleY: CGFloat
     {
@@ -1753,10 +1751,10 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
         }
         return _viewPortHandler.scaleY
     }
-
+    
     /// if the chart is fully zoomed out, return true
     @objc open var isFullyZoomedOut: Bool { return _viewPortHandler.isFullyZoomedOut }
-
+    
     /// - Returns: The y-axis object to the corresponding AxisDependency. In the
     /// horizontal bar-chart, LEFT == top, RIGHT == BOTTOM
     @objc open func getAxis(_ axis: YAxis.AxisDependency) -> YAxis
@@ -1789,33 +1787,33 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             }
         }
     }
-
+    
     /// **default**: false
     /// `true` if pinch-zoom is enabled, `false` ifnot
     @objc open var isPinchZoomEnabled: Bool { return pinchZoomEnabled }
-
+    
     /// Set an offset in dp that allows the user to drag the chart over it's
     /// bounds on the x-axis.
     @objc open func setDragOffsetX(_ offset: CGFloat)
     {
         _viewPortHandler.setDragOffsetX(offset)
     }
-
+    
     /// Set an offset in dp that allows the user to drag the chart over it's
     /// bounds on the y-axis.
     @objc open func setDragOffsetY(_ offset: CGFloat)
     {
         _viewPortHandler.setDragOffsetY(offset)
     }
-
+    
     /// `true` if both drag offsets (x and y) are zero or smaller.
     @objc open var hasNoDragOffset: Bool { return _viewPortHandler.hasNoDragOffset }
-
+    
     open override var chartYMax: Double
     {
         return max(leftAxis._axisMaximum, rightAxis._axisMaximum)
     }
-
+    
     open override var chartYMin: Double
     {
         return min(leftAxis._axisMinimum, rightAxis._axisMinimum)
@@ -1896,7 +1894,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             return rightAxis.maxWidth
         }
     }
-
+    
     /// - Returns the width of the specified y axis.
     @objc open func getYAxisWidth(_ axis: YAxis.AxisDependency) -> CGFloat
     {
@@ -1965,7 +1963,7 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             y: viewPortHandler.contentBottom)
         
         getTransformer(forAxis: .left).pixelToValues(&pt)
-
+        
         return min(xAxis._axisMaximum, Double(pt.x))
     }
 }
