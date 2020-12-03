@@ -292,12 +292,12 @@ open class XAxisRenderer: AxisRendererBase
                           y: y,
                           width: labelHighlightWidth,
                           height: tempLabel.bounds.height)
-        let clipPath: CGPath = UIBezierPath(roundedRect: rect, cornerRadius: 4.0).cgPath
+//        let clipPath: CGPath = UIBezierPath(roundedRect: rect, cornerRadius: 4.0).cgPath
         
         let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
         context.setFillColor(fillColor.cgColor)
         context.addRect(rect)
-        context.addPath(clipPath)
+//        context.addPath(clipPath)
         context.setLineWidth(0)
         context.setStrokeColor(UIColor.clear.cgColor)
         context.drawPath(using: .fillStroke)
