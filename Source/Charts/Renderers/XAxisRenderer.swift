@@ -251,7 +251,9 @@ open class XAxisRenderer: AxisRendererBase
                           constrainedToSize: labelMaxSize,
                           anchor: anchor,
                           angleRadians: labelRotationAngleRadians,
-                          isHighlightLabel: i == xAxis.labelHighlightIndex)
+                          isHighlightLabel: i == xAxis.labelHighlightIndex,
+                          labelHighlightWidth: xAxis.labelHighlightWidth,
+                          labelHighlightBackgroundColor: xAxis.labelHighlightBackgroundColor)
             }
         }
     }
@@ -265,7 +267,9 @@ open class XAxisRenderer: AxisRendererBase
         constrainedToSize: CGSize,
         anchor: CGPoint,
         angleRadians: CGFloat,
-        isHighlightLabel: Bool)
+        isHighlightLabel: Bool,
+        labelHighlightWidth: CGFloat,
+        labelHighlightBackgroundColor: UIColor)
     {
         ChartUtils.drawMultilineText(
             context: context,
@@ -276,8 +280,7 @@ open class XAxisRenderer: AxisRendererBase
             anchor: anchor,
             angleRadians: angleRadians)
         
-        
-        // Add background here?
+        // Label background handling
         print("💡 - labeltext: \(formattedLabel)")
         let tempLabel = UILabel()
         tempLabel.numberOfLines = 0
@@ -285,10 +288,16 @@ open class XAxisRenderer: AxisRendererBase
         tempLabel.sizeToFit()
         print("💡 - label from drawLabel: \(tempLabel)")
         
-        let rect = CGRect(x: x, y: y, width: tempLabel.bounds.width, height: tempLabel.bounds.height)
-        let fillColor = isHighlightLabel ? UIColor.red.withAlphaComponent(0.1) : UIColor.clear
+        let rect = CGRect(x: x - (labelHighlightWidth/2),
+                          y: y,
+                          width: labelHighlightWidth,
+                          height: tempLabel.bounds.height)
+        let clipPath: CGPath = UIBezierPath(roundedRect: rect, cornerRadius: 4.0).cgPath
+        
+        let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
         context.setFillColor(fillColor.cgColor)
         context.addRect(rect)
+        context.addPath(clipPath)
         context.setLineWidth(0)
         context.setStrokeColor(UIColor.clear.cgColor)
         context.drawPath(using: .fillStroke)
