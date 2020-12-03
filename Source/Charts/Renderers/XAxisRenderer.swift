@@ -286,17 +286,15 @@ open class XAxisRenderer: AxisRendererBase
         tempLabel.numberOfLines = 0
         tempLabel.text = formattedLabel
         tempLabel.sizeToFit()
-        print("💡 - labelsize from drawLabel: \(tempLabel.bounds.size)")
-        print("💡 - constraint to size: \(constrainedToSize)")
         
         let rect = CGRect(x: x - (labelHighlightWidth/2),
                           y: y - yOffSet,
                           width: labelHighlightWidth,
-                          height: tempLabel.bounds.height - 20)
+                          height: tempLabel.bounds.height - (yOffSet * 2))
         
         let clipPath: UIBezierPath = UIBezierPath(roundedRect: rect,
                                                   byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight],
-                                                  cornerRadii: CGSize(width: 8.0, height: 8.0))
+                                                  cornerRadii: CGSize(width: 4.0, height: 4.0))
         
         let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
         context.setFillColor(fillColor.cgColor)
