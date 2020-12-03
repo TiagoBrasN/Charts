@@ -268,8 +268,6 @@ open class ChartUtils
             
             context.saveGState()
             context.translateBy(x: translate.x, y: translate.y)
-            context.rotate(by: angleRadians)
-            context.setFillColor(UIColor.red.cgColor)
             context.fill(rect)
             
             (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
@@ -286,9 +284,6 @@ open class ChartUtils
             
             rect.origin.x += point.x
             rect.origin.y += point.y
-            
-            context.setFillColor(UIColor.red.cgColor)
-            context.fill(rect)
             
             (text as NSString).draw(with: rect, options: .usesLineFragmentOrigin, attributes: attributes, context: nil)
         }

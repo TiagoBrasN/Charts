@@ -273,6 +273,17 @@ open class XAxisRenderer: AxisRendererBase
             constrainedToSize: constrainedToSize,
             anchor: anchor,
             angleRadians: angleRadians)
+        
+        // Add background here?
+        print("💡 - labeltext: \(formattedLabel)")
+        let tempLabel = UILabel()
+        tempLabel.numberOfLines = 0
+        tempLabel.text = formattedLabel
+        tempLabel.sizeToFit()
+        print("💡 - label from drawLabel: \(tempLabel)")
+        
+        let rect = CGRect(x: x, y: y, width: tempLabel.bounds.width, height: tempLabel.bounds.height)
+        print("💡 - background -> \(rect)")
     }
     
     open override func renderGridLines(context: CGContext)

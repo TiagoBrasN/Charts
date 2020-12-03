@@ -51,8 +51,11 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
                                                                   dataSetIndex: highlight.dataSetIndex,
                                                                   viewPortHandler: viewPortHandler) ?? "\(entry.y)"
         let tempLabel = UILabel()
+        tempLabel.numberOfLines = 0
         tempLabel.text = elementValueText
         tempLabel.sizeToFit()
+        
+        print("🚨 - label from highlight \(tempLabel)")
         
         let width = set.barHighlightWidth != 0 ? set.barHighlightWidth : tempLabel.bounds.size.width
         let minY = viewPortHandler.contentTop
