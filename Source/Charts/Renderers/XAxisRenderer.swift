@@ -282,32 +282,28 @@ open class XAxisRenderer: AxisRendererBase
             angleRadians: angleRadians)
         
         // Label background handling
-        print("💡 - labeltext: \(formattedLabel)")
         let tempLabel = UILabel()
         tempLabel.numberOfLines = 0
         tempLabel.text = formattedLabel
         tempLabel.sizeToFit()
-        print("💡 - label from drawLabel: \(tempLabel)")
+        print("💡 - labelsize from drawLabel: \(tempLabel.bounds.size)")
+        print("💡 - constraint to size: \(constrainedToSize)")
         
         let rect = CGRect(x: x - (labelHighlightWidth/2),
                           y: y - yOffSet,
                           width: labelHighlightWidth,
-                          height: tempLabel.bounds.height - 10)
-//        UIColor.clear.set()
+                          height: tempLabel.bounds.height - 20)
+        
         let clipPath: UIBezierPath = UIBezierPath(roundedRect: rect,
                                                   byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight],
                                                   cornerRadii: CGSize(width: 8.0, height: 8.0))
-//        clipPath.fill()
         
         let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
-        print("💡 - Fillcolor: \(fillColor)")
         context.setFillColor(fillColor.cgColor)
-//        context.addRect(rect)
         context.addPath(clipPath.cgPath)
         context.setLineWidth(0)
         context.setStrokeColor(UIColor.clear.cgColor)
         context.drawPath(using: .fillStroke)
-        print("💡 - background -> \(rect)")
     }
     
     open override func renderGridLines(context: CGContext)
