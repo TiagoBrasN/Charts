@@ -547,11 +547,13 @@ open class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChartD
             
             if h === nil || h == self.lastHighlighted
             {
+                print("💡 1")
                 lastHighlighted = nil
                 highlightValue(nil, callDelegate: true)
             }
             else
             {
+                print("💡 2")
                 lastHighlighted = h
                 highlightValue(h, callDelegate: true)
             }
