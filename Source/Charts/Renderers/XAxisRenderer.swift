@@ -290,7 +290,7 @@ open class XAxisRenderer: AxisRendererBase
         let rect = CGRect(x: x - (labelHighlightWidth/2),
                           y: y - yOffSet,
                           width: labelHighlightWidth,
-                          height: tempLabel.bounds.height - (yOffSet * 2))
+                          height: tempLabel.bounds.height - (yOffSet * 2) - 5)
         
         let clipPath: UIBezierPath = UIBezierPath(roundedRect: rect,
                                                   byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight],
