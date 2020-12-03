@@ -192,7 +192,6 @@ open class XAxisRenderer: AxisRendererBase
         var position = CGPoint(x: 0.0, y: 0.0)
         
         var labelMaxSize = CGSize()
-        
         if xAxis.isWordWrapEnabled
         {
             labelMaxSize.width = xAxis.wordWrapWidthPercent * valueToPixelMatrix.a
@@ -253,7 +252,8 @@ open class XAxisRenderer: AxisRendererBase
                           angleRadians: labelRotationAngleRadians,
                           isHighlightLabel: i == xAxis.labelHighlightIndex,
                           labelHighlightWidth: xAxis.labelHighlightWidth,
-                          labelHighlightBackgroundColor: xAxis.labelHighlightBackgroundColor)
+                          labelHighlightBackgroundColor: xAxis.labelHighlightBackgroundColor,
+                          yOffSet: xAxis.yOffset)
             }
         }
     }
@@ -269,7 +269,8 @@ open class XAxisRenderer: AxisRendererBase
         angleRadians: CGFloat,
         isHighlightLabel: Bool,
         labelHighlightWidth: CGFloat,
-        labelHighlightBackgroundColor: UIColor)
+        labelHighlightBackgroundColor: UIColor,
+        yOffSet: CGFloat)
     {
         ChartUtils.drawMultilineText(
             context: context,
@@ -289,15 +290,16 @@ open class XAxisRenderer: AxisRendererBase
         print("💡 - label from drawLabel: \(tempLabel)")
         
         let rect = CGRect(x: x - (labelHighlightWidth/2),
-                          y: y,
+                          y: y - yOffSet,
                           width: labelHighlightWidth,
-                          height: tempLabel.bounds.height)
-//        let clipPath: CGPath = UIBezierPath(roundedRect: rect, cornerRadius: 4.0).cgPath
+                          height: tempLabel.bounds.height + yOffSet + 10)
+        let clipPath: CGPath = UIBezierPath(roundedRect: rect, cornerRadius: 4.0).cgPath
         
         let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
+        print("💡 - Fillcolor: \(fillColor)")
         context.setFillColor(fillColor.cgColor)
         context.addRect(rect)
-//        context.addPath(clipPath)
+        context.addPath(clipPath)
         context.setLineWidth(0)
         context.setStrokeColor(UIColor.clear.cgColor)
         context.drawPath(using: .fillStroke)
