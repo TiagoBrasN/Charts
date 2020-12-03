@@ -151,7 +151,8 @@ open class XAxisRendererHorizontalBarChart: XAxisRenderer
                         formattedLabel: label,
                         x: pos,
                         y: position.y,
-                        attributes: [NSAttributedString.Key.font: labelFont, NSAttributedString.Key.foregroundColor: labelTextColor],
+                        attributes: [NSAttributedString.Key.font: labelFont,
+                                     NSAttributedString.Key.foregroundColor: labelTextColor],
                         anchor: anchor,
                         angleRadians: labelRotationAngleRadians)
                 }
@@ -251,7 +252,7 @@ open class XAxisRendererHorizontalBarChart: XAxisRenderer
             let transformer = self.transformer
             else { return }
         
-        var limitLines = xAxis.limitLines
+        let limitLines = xAxis.limitLines
         
         if limitLines.count == 0
         {

@@ -275,7 +275,7 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
         // if values are drawn
         if isDrawingValuesAllowed(dataProvider: dataProvider)
         {
-            var dataSets = candleData.dataSets
+            let dataSets = candleData.dataSets
             
             let phaseY = animator.phaseY
             
@@ -283,13 +283,10 @@ open class CandleStickChartRenderer: LineScatterCandleRadarRenderer
             
             for i in 0 ..< dataSets.count
             {
-                guard let dataSet = dataSets[i] as? IBarLineScatterCandleBubbleChartDataSet
+                guard let
+                    dataSet = dataSets[i] as? IBarLineScatterCandleBubbleChartDataSet,
+                    shouldDrawValues(forDataSet: dataSet)
                     else { continue }
-                
-                if !shouldDrawValues(forDataSet: dataSet)
-                {
-                    continue
-                }
                 
                 let valueFont = dataSet.valueFont
                 

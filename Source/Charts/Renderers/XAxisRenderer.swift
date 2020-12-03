@@ -12,6 +12,14 @@
 import Foundation
 import CoreGraphics
 
+#if canImport(UIKit)
+    import UIKit
+#endif
+
+#if canImport(Cocoa)
+import Cocoa
+#endif
+
 @objc(ChartXAxisRenderer)
 open class XAxisRenderer: AxisRendererBase
 {
@@ -171,9 +179,8 @@ open class XAxisRenderer: AxisRendererBase
         let paraStyle = NSParagraphStyle.default.mutableCopy() as! NSMutableParagraphStyle
         paraStyle.alignment = .center
         
-        let labelAttrs: [NSAttributedString.Key : Any] = [
+        var labelAttrs: [NSAttributedString.Key : Any] = [
             .font: xAxis.labelFont,
-            .foregroundColor: xAxis.labelTextColor,
             .paragraphStyle: paraStyle
         ]
         let labelRotationAngleRadians = xAxis.labelRotationAngle.DEG2RAD
@@ -185,7 +192,6 @@ open class XAxisRenderer: AxisRendererBase
         var position = CGPoint(x: 0.0, y: 0.0)
         
         var labelMaxSize = CGSize()
-        
         if xAxis.isWordWrapEnabled
         {
             labelMaxSize.width = xAxis.wordWrapWidthPercent * valueToPixelMatrix.a
@@ -195,6 +201,9 @@ open class XAxisRenderer: AxisRendererBase
         
         for i in stride(from: 0, to: entries.count, by: 1)
         {
+
+            labelAttrs[.foregroundColor] = i == xAxis.labelHighlightIndex ? xAxis.labelHighlightColor : xAxis.labelTextColor
+            
             if centeringEnabled
             {
                 position.x = CGFloat(xAxis.centeredEntries[i])
@@ -240,7 +249,11 @@ open class XAxisRenderer: AxisRendererBase
                           attributes: labelAttrs,
                           constrainedToSize: labelMaxSize,
                           anchor: anchor,
-                          angleRadians: labelRotationAngleRadians)
+                          angleRadians: labelRotationAngleRadians,
+                          isHighlightLabel: i == xAxis.labelHighlightIndex,
+                          labelHighlightWidth: xAxis.labelHighlightWidth,
+                          labelHighlightBackgroundColor: xAxis.labelHighlightBackgroundColor,
+                          yOffSet: xAxis.yOffset)
             }
         }
     }
@@ -253,7 +266,11 @@ open class XAxisRenderer: AxisRendererBase
         attributes: [NSAttributedString.Key : Any],
         constrainedToSize: CGSize,
         anchor: CGPoint,
-        angleRadians: CGFloat)
+        angleRadians: CGFloat,
+        isHighlightLabel: Bool,
+        labelHighlightWidth: CGFloat,
+        labelHighlightBackgroundColor: UIColor,
+        yOffSet: CGFloat)
     {
         ChartUtils.drawMultilineText(
             context: context,
@@ -263,6 +280,28 @@ open class XAxisRenderer: AxisRendererBase
             constrainedToSize: constrainedToSize,
             anchor: anchor,
             angleRadians: angleRadians)
+        
+        // Label background handling
+        let tempLabel = UILabel()
+        tempLabel.numberOfLines = 0
+        tempLabel.text = formattedLabel
+        tempLabel.sizeToFit()
+        
+        let rect = CGRect(x: x - (labelHighlightWidth/2),
+                          y: y - yOffSet,
+                          width: labelHighlightWidth,
+                          height: tempLabel.bounds.height - (yOffSet * 2) - 5)
+        
+        let clipPath: UIBezierPath = UIBezierPath(roundedRect: rect,
+                                                  byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.bottomRight],
+                                                  cornerRadii: CGSize(width: 4.0, height: 4.0))
+        
+        let fillColor: UIColor = isHighlightLabel ? labelHighlightBackgroundColor : .clear
+        context.setFillColor(fillColor.cgColor)
+        context.addPath(clipPath.cgPath)
+        context.setLineWidth(0)
+        context.setStrokeColor(UIColor.clear.cgColor)
+        context.drawPath(using: .fillStroke)
     }
     
     open override func renderGridLines(context: CGContext)

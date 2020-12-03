@@ -11,12 +11,12 @@
 
 import Foundation
 import CoreGraphics
+import UIKit
 
 @objc(LineScatterCandleRadarChartRenderer)
-open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
-{
-    public override init(animator: Animator, viewPortHandler: ViewPortHandler)
-    {
+open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer {
+    
+    public override init(animator: Animator, viewPortHandler: ViewPortHandler) {
         super.init(animator: animator, viewPortHandler: viewPortHandler)
     }
     
@@ -25,12 +25,10 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
     /// :param: points
     /// :param: horizontal
     /// :param: vertical
-    @objc open func drawHighlightLines(context: CGContext, point: CGPoint, set: ILineScatterCandleRadarChartDataSet)
-    {
+    @objc open func drawHighlightLines(context: CGContext, point: CGPoint, set: ILineScatterCandleRadarChartDataSet) {
         
         // draw vertical highlight lines
-        if set.isVerticalHighlightIndicatorEnabled
-        {
+        if set.isVerticalHighlightIndicatorEnabled {
             context.beginPath()
             context.move(to: CGPoint(x: point.x, y: viewPortHandler.contentTop))
             context.addLine(to: CGPoint(x: point.x, y: viewPortHandler.contentBottom))
@@ -38,12 +36,38 @@ open class LineScatterCandleRadarRenderer: BarLineScatterCandleBubbleRenderer
         }
         
         // draw horizontal highlight lines
-        if set.isHorizontalHighlightIndicatorEnabled
-        {
+        if set.isHorizontalHighlightIndicatorEnabled {
             context.beginPath()
             context.move(to: CGPoint(x: viewPortHandler.contentLeft, y: point.y))
             context.addLine(to: CGPoint(x: viewPortHandler.contentRight, y: point.y))
             context.strokePath()
         }
     }
+    
+    @objc open func drawHighlightBar(context: CGContext, graph: LineChartView, highlight: Highlight, set: ILineScatterCandleRadarChartDataSet, point: CGPoint, entry: ChartDataEntry) {
+
+        let elementValueText = set.valueFormatter?.stringForValue(entry.y,
+                                                                  entry: entry,
+                                                                  dataSetIndex: highlight.dataSetIndex,
+                                                                  viewPortHandler: viewPortHandler) ?? "\(entry.y)"
+        let tempLabel = UILabel()
+        tempLabel.numberOfLines = 0
+        tempLabel.text = elementValueText
+        tempLabel.sizeToFit()
+        
+        let width = set.barHighlightWidth != 0 ? set.barHighlightWidth : tempLabel.bounds.size.width
+        let minY = viewPortHandler.contentTop
+        let maxY = viewPortHandler.contentBottom
+        let minX = point.x - (width/2)
+        let maxX = point.x + (width/2)
+        
+        let rectangle = CGRect(x: minX, y: minY, width: maxX - minX, height:  maxY - minY)
+        context.setFillColor(set.highlightBarColor.cgColor)
+        context.addRect(rectangle)
+        context.setLineWidth(0)
+        context.setStrokeColor(UIColor.clear.cgColor)
+        context.drawPath(using: .fillStroke)
+
+    }
+    
 }
