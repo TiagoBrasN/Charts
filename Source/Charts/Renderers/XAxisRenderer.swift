@@ -250,7 +250,8 @@ open class XAxisRenderer: AxisRendererBase
                           attributes: labelAttrs,
                           constrainedToSize: labelMaxSize,
                           anchor: anchor,
-                          angleRadians: labelRotationAngleRadians)
+                          angleRadians: labelRotationAngleRadians,
+                          isHighlightLabel: i == xAxis.labelHighlightIndex)
             }
         }
     }
@@ -263,7 +264,8 @@ open class XAxisRenderer: AxisRendererBase
         attributes: [NSAttributedString.Key : Any],
         constrainedToSize: CGSize,
         anchor: CGPoint,
-        angleRadians: CGFloat)
+        angleRadians: CGFloat,
+        isHighlightLabel: Bool)
     {
         ChartUtils.drawMultilineText(
             context: context,
@@ -274,6 +276,7 @@ open class XAxisRenderer: AxisRendererBase
             anchor: anchor,
             angleRadians: angleRadians)
         
+        
         // Add background here?
         print("💡 - labeltext: \(formattedLabel)")
         let tempLabel = UILabel()
@@ -283,6 +286,12 @@ open class XAxisRenderer: AxisRendererBase
         print("💡 - label from drawLabel: \(tempLabel)")
         
         let rect = CGRect(x: x, y: y, width: tempLabel.bounds.width, height: tempLabel.bounds.height)
+        let fillColor = isHighlightLabel ? UIColor.red.withAlphaComponent(0.1) : UIColor.clear
+        context.setFillColor(fillColor.cgColor)
+        context.addRect(rect)
+        context.setLineWidth(0)
+        context.setStrokeColor(UIColor.clear.cgColor)
+        context.drawPath(using: .fillStroke)
         print("💡 - background -> \(rect)")
     }
     
