@@ -17,5 +17,5 @@ let package = Package(
     targets: [
         .target(name: "Charts")
     ],
-
     swiftLanguageVersions: [.v5]
+)
